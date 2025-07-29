@@ -14,6 +14,8 @@ class LoadStreamlitUI:
             layout="wide"
         )
         st.header(self.config.get_page_title())
+        st.session_state.time_frame = ""
+        st.session_state.IsFetchButtonClicked = False
         
         with st.sidebar:
             llm_options = self.config.get_llm_options()
@@ -44,11 +46,24 @@ class LoadStreamlitUI:
                 key="usecase_selectbox"
             )
             
-            if self.user_controls['selected_usecase'] == "Chatbot with WebSearch":
+            if self.user_controls['selected_usecase'] in ["Chatbot with WebSearch", "AI News"]:
                 os.environ["TAVILY_API_KEY"] = self.user_controls["TAVILY_API_KEY"] = st.session_state["TAVILY_API_KEY"] = st.text_input("TAVILY_API_KEY", type="password")
                 
                 # Validate API key
                 if not self.user_controls["TAVILY_API_KEY"]:
                     st.warning("Please enter your Tavily API key to proceed. Don't have one? Visit https://tavily.com/ to get started.")
+            
+            if self.user_controls['selected_usecase'] == "AI News":
+                st.subheader("AI News Explorer")
                 
+                with st.sidebar:
+                    time_frame = st.selectbox(
+                        "Select Time Frame",
+                        ["Daily", "Weekly", "Monthly"],
+                        index=0,
+                    )
+                if st.button("Fetch Latest AI News", use_container_width=True):
+                    st.session_state.IsFetchButtonClicked = True
+                    st.session_state.time_frame = time_frame
+               
         return self.user_controls

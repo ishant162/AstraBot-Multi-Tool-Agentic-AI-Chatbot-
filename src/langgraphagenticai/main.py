@@ -26,7 +26,12 @@ def load_langgraph_agentic_app():
         st.error("No user input provided. Please select options from the sidebar.")
         return
     
-    user_message = st.chat_input("Enter your message here:")
+    # Text input for user message
+    if st.session_state.IsFetchButtonClicked:
+        user_message = st.session_state.time_frame
+    else:
+        user_message = st.chat_input("Enter your message here:")
+    
     if user_message:
         try:
             # Configure the LLM model based on user input
