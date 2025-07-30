@@ -2,11 +2,12 @@ import json
 import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage, ToolMessage
 
+
 class DisplayResultStreamlit:
     """
     Class to display the result of the LangGraph Agentic AI in a Streamlit UI.
     """
-    
+
     def __init__(self, usecase, graph, user_message):
         self.usecase = usecase
         self.graph = graph
@@ -20,15 +21,15 @@ class DisplayResultStreamlit:
         graph = self.graph
         user_message = self.user_message
         if usecase == "Basic Chatbot":
-            for event in graph.stream({'messages': ("user", user_message)}):
+            for event in graph.stream({"messages": ("user", user_message)}):
                 print(event.values())
                 for value in event.values():
-                    print(value['messages'])
+                    print(value["messages"])
                     with st.chat_message("user"):
                         st.write(user_message)
                     with st.chat_message("assistant"):
-                        st.write(value['messages'].content)
-                        
+                        st.write(value["messages"].content)
+
         elif usecase == "Chatbot with WebSearch":
             # Prepare state and invoke the graph
             initial_state = {"messages": [user_message]}
@@ -45,7 +46,7 @@ class DisplayResultStreamlit:
                 elif type(message) == AIMessage and message.content:
                     with st.chat_message("assistant"):
                         st.write(message.content)
-                        
+
         elif usecase == "AI News":
             frequency = self.user_message
             with st.spinner("Fetching and summarizing news... ⏳"):

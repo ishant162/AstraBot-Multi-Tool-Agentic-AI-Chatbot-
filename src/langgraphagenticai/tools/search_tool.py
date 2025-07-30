@@ -1,6 +1,7 @@
 from langchain_tavily import TavilySearch
 from langgraph.prebuilt import ToolNode
 
+
 def get_tools():
     """
     Get the tools available for the chatbot.
@@ -9,6 +10,7 @@ def get_tools():
     """
     tools = [TavilySearch(max_results=2)]
     return tools
+
 
 def create_tool_node(tools):
     """
